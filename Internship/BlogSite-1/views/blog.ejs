@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #ffffff;
+        }
+        
+        .links {
+            margin-left: auto; /* Pushes the links to the right side */
+        }
+        
+        .links a {
+            text-decoration: none;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #007bff;
+            transition: background-color 0.3s;
+        }
+        
+        .links a:hover {
+            background-color: #0056b3;
+        }
+        
+        .content {
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+        
+        .post-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .post {
+            position: relative; /* Required for absolute positioning */
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .post img {
+            width: 200px; /* Set the width of the image */
+            height: auto; /* Maintain aspect ratio */
+            max-height: 200px; /* Set maximum height if needed */
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+        }
+        
+        .post-details {
+            flex-grow: 1; /* Allow post details to grow and take remaining space */
+            padding: 20px;
+        }
+        
+        .post h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .user-name{
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .post p {
+            margin-top: 0;
+            color: #666;
+        }
+        
+        /* Apply styling similar to the delete button in the first snippet */
+        .delete-button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="links">
+          <%  if(!users.email){ %>
+             <a href="/login">LOGIN</a>
+             <a href="/signup">SIGNUP</a>
+             <%}else{%>
+                <a href="/mypost">MY POST</a>
+                <a href="/addpost">NEW POST</a>
+                <a href="/logout">LOGOUT</a>
+          <% } %>
+
+        </div>  
+    </div>
+    <div class="content">
+        <h2 class="user-name">WELCOME  <%=users.email%></h2>
+        <h3>All Posts</h3>
+        <ul class="post-list">
+            <!-- Loop through each post and display them as list items -->
+            <% blog.forEach(user => { %>
+                <% user.post.forEach(post => { %>
+                    <li class="post">
+                        <img src="<%= post.image %>" alt="">
+                        <div class="post-details">
+                            <h2><%= post.title %></h2>
+                            <p><%= post.description %></p>
+                        </div>
+                        <h4><%= users.gmail %></h4>
+                       <% if(users.role == "admin"){ %>
+                            <button class="delete-button" onclick="deletepost('<%=post.id%>')">DELETE</button>
+                      <%  } %>
+                        <!-- Add delete button here if needed -->
+                    </li>
+                <% }) %>
+            <% }) %>
+        </ul>
+        
+        
+    </div>
+</body>
+<script>
+    function deletepost(id){
+        fetch(`/delete/post/${id}`)
+        var parent = event.target.parentElement;
+        parent.remove();
+    }
+</script>
+</html>
